@@ -1,0 +1,4 @@
+---
+plugin: "uofuchpc.cmdb.bearer_token"
+cmdb_api_bearer_token: "REDACTED"
+cmdb_api_url: "REDACTED"
