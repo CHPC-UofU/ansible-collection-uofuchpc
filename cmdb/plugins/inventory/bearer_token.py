@@ -15,7 +15,7 @@ name: bearer_token
 plugin_type: inventory
 version_added: "0.0.1"
 authors:
-  - UofU CHPC (helpdesk@chpc.utah.edu)
+  - UofU CHPC <helpdesk@chpc.utah.edu>
 short_description: "A simple inventory plugin for a CMDB and bearer token."
 description:
   - "A simple inventory plugin for a CMDB and bearer token."
@@ -78,7 +78,9 @@ class InventoryModule(BaseInventoryPlugin):
 
     @staticmethod
     def _check_requirements():
-        """Check all requirements for this inventory are satisfied."""
+        """
+        Check all requirements for this inventory are satisfied.
+        """
 
         if not HAS_REQUESTS:
             raise AnsibleParserError('Please install "requests" Python module as this is required'
@@ -86,6 +88,9 @@ class InventoryModule(BaseInventoryPlugin):
 
     @staticmethod
     def _fetch_inventory_data(cmdb_api_url: str, cmdb_api_bearer_token: str):
+        """
+        Fetch the inventory data
+        """
         headers = {
             "Authorization": f"Bearer {cmdb_api_bearer_token}",
             "Content-Type": "application/json"
@@ -103,7 +108,11 @@ class InventoryModule(BaseInventoryPlugin):
             raise AnsibleError(f"An error occurred, the original exception is: {to_native(e)}")
 
     def verify_file(self, path):
-
+        """
+        Verify the plugin configuration file
+        :param path: path of the configuration YAML file
+        :return: True if everything is correct, otherwise False
+        """
         valid = False
         if super(InventoryModule, self).verify_file(path):
             if path.endswith((self.NAME + ".yaml", self.NAME + ".yml")):
@@ -111,6 +120,9 @@ class InventoryModule(BaseInventoryPlugin):
         return valid
 
     def parse(self, inventory, loader, path, cache=False):
+        """
+        Parses the inventory file
+        """
 
         super(InventoryModule, self).parse(inventory, loader, path, cache)
         self._read_config_data(path)
