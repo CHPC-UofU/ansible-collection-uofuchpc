@@ -87,9 +87,12 @@ class InventoryModule(BaseInventoryPlugin):
                                      ' for this dynamic inventory plugin.')
 
     @staticmethod
-    def _fetch_inventory_data(cmdb_api_url: str, cmdb_api_bearer_token: str):
+    def _load_inventory_data(cmdb_api_url: str, cmdb_api_bearer_token: str):
         """
-        Fetch the inventory data
+        Load the inventory from the CMDB
+        :param cmdb_api_url: URL for the CMDB API endpoint
+        :param cmdb_api_bearer_token: Bearer token
+        :return: JSON
         """
         headers = {
             "Authorization": f"Bearer {cmdb_api_bearer_token}",
@@ -113,6 +116,7 @@ class InventoryModule(BaseInventoryPlugin):
         :param path: path of the configuration YAML file
         :return: True if everything is correct, otherwise False
         """
+
         valid = False
         if super(InventoryModule, self).verify_file(path):
             if path.endswith((self.NAME + ".yaml", self.NAME + ".yml")):
@@ -124,13 +128,15 @@ class InventoryModule(BaseInventoryPlugin):
         Parses the inventory file
         """
 
-        super(InventoryModule, self).parse(inventory, loader, path, cache)
+        super(InventoryModule, self).parse(inventory, loader, path, cache=cache)
         self._read_config_data(path)
 
         cmdb_api_bearer_token = self.get_option('cmdb_api_bearer_token')
         cmdb_api_url = self.get_option('cmdb_api_url')
 
-        raw_data = self._fetch_inventory_data(cmdb_api_url, cmdb_api_bearer_token)
+        raw_data = self._load_inventory_data(cmdb_api_url, cmdb_api_bearer_token)
+        self.display.vvv(to_native(raw_data))
+
         # _meta = raw_data.pop('_meta')
         for group_name, group_data in raw_data.items():
             for host_name in group_data['hosts']:
