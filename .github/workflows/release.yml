@@ -1,0 +1,46 @@
+name: Collection Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build Collection
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: .
+
+      - name: Get the release version
+        run: echo "RELEASE_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Python packages
+        run: >-
+          python3.9 -m pip install -r requirements.txt
+
+      - name: Build the Ansible Collection
+        run: >-
+          ansible-galaxy collection build -f ./cmdb/ --output-path build
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/*.tar.gz"
+          body: "A simple collection for a CMDB."
+          name: Release ${{ env.RELEASE_VERSION }}
+          tag: refs/tags/v${{ env.RELEASE_VERSION }}
+          prerelease: false
