@@ -42,5 +42,5 @@ jobs:
           artifacts: "build/*.tar.gz"
           body: "A simple collection for a CMDB."
           name: Release ${{ env.RELEASE_VERSION }}
-          tag: refs/tags/v${{ env.RELEASE_VERSION }}
+          tag: refs/tags/${{ env.RELEASE_VERSION }}
           prerelease: false
