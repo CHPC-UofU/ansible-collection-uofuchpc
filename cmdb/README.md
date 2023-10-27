@@ -10,14 +10,12 @@ A simple collection for a CMDB.
 * [Inventories](https://docs.ansible.com/ansible-tower/latest/html/userguide/inventories.html)
 * [Inventory File Importing](https://docs.ansible.com/ansible-tower/3.8.6/html/administration/scm-inv-source.html#ag-inv-import)
 * [Custom Credential Types](https://docs.ansible.com/ansible-tower/3.8.6/html/userguide/credential_types.html#ug-credential-types)
-
-https://github.com/ansible-collections/amazon.aws/blob/main/plugins/inventory/aws_ec2.py
-https://docs.ansible.com/ansible/latest/plugins/inventory.html
-https://www.redhat.com/sysadmin/ansible-plugin-inventory-files
-https://docs.ansible.com/ansible/latest/plugins/inventory.html
-https://blog.networktocode.com/post/Ansible-Dynamic-Inventory-using-Plugins/
-https://docs.ansible.com/ansible/latest/dev_guide/developing_plugins.html#developing-plugins
-https://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html
+* [GitHub: amazon.aws/plugins/inventory/aws_ec2.py](https://github.com/ansible-collections/amazon.aws/blob/main/plugins/inventory/aws_ec2.py)
+* [Inventory plugins](https://docs.ansible.com/ansible/latest/plugins/inventory.html)
+* [How to write an Ansible plugin to create inventory files](https://www.redhat.com/sysadmin/ansible-plugin-inventory-files)
+* [Ansible Dynamic Inventory Using Plugins](https://blog.networktocode.com/post/Ansible-Dynamic-Inventory-using-Plugins/)
+* [Developing plugins](https://docs.ansible.com/ansible/latest/dev_guide/developing_plugins.html#developing-plugins)
+* [Developing dynamic inventory](https://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html)
 
 ## Testing
 
