@@ -9,4 +9,5 @@ dependencies:
   - pip:
       - ansible==8.5.0
       - ansible-lint==6.21.1
+      - jsonschema==4.19.1
       - requests==2.31.0
