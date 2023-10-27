@@ -1,11 +1,12 @@
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils.common.text.converters import to_native
 from ansible.plugins.inventory import BaseInventoryPlugin
+from jsonschema import validate
 
 # import requests
 
 ANSIBLE_METADATA = {
-    'metadata_version': '0.0.1',
+    'metadata_version': '0.0.2',
     'status': ['preview'],
     'supported_by': 'community'
 }
@@ -55,7 +56,7 @@ plugin: uofuchpc.cmdb.bearer_token
 # Fetch all hosts returned by the CMDB
 plugin: uofuchpc.cmdb.bearer_token
 cmdb_api_bearer_token: "123456abcdefgH"
-cmdb_api_url: "https://portal.example.com/route/"
+cmdb_api_url: "https://api.example.com/route/"
 """
 
 try:
@@ -137,9 +138,58 @@ class InventoryModule(BaseInventoryPlugin):
         raw_data = self._load_inventory_data(cmdb_api_url, cmdb_api_bearer_token)
         self.display.vvv(to_native(raw_data))
 
-        # _meta = raw_data.pop('_meta')
-        for group_name, group_data in raw_data.items():
-            for host_name in group_data['hosts']:
-                self.inventory.add_host(host_name)
-                # for var_key, var_val in _meta['hostvars'][host_name].items():
-                #     self.inventory.set_variable(host_name, var_key, var_val)
+        # Validate the data:
+        schema = {
+            "hosts": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "address": {"type", "string"},
+                        "attrs": {
+                            "type": "object",
+                            "properties": {
+                                "is_virtual_machine": {"type": "boolean"}
+                            }
+                        },
+                        "tags": {
+                            "type": "array",
+                            "items": {"type": "string"}
+                        }
+                    },
+                    "required": ["address"]
+                },
+                "minItems": 1,
+                "additionalItems": False
+            }
+        }
+        try:
+            validate(instance=raw_data, schema=schema)
+        except Exception as e:
+            raise AnsibleError(f"An error occurred, the original exception is: {to_native(e)}")
+
+        # Sort the data:
+        sorted_data = sorted(raw_data['hosts'], key=lambda item: item['address'])
+
+        # Add groups:
+        host_groups = []
+        for host in sorted_data:
+            for key, val in host['attrs'].items():
+                if key == 'tags' and isinstance(val, list):
+                    host_groups = host_groups + val
+        host_groups = list(set(host_groups))
+        for group in host_groups:
+            self.inventory.add_group(group)
+
+        # Add hosts:
+        for host in sorted_data:
+            hostname = host['address']
+            self.inventory.add_host(hostname, group='all')
+            self.inventory.set_variable(hostname, 'ansible_host', hostname)
+
+            for key, val in host['attrs'].items():
+                if key == 'tags' and isinstance(val, list):
+                    for tag in val:
+                        self.inventory.add_host(hostname, group=tag)
+                else:
+                    self.inventory.set_variable(hostname, key, val)
