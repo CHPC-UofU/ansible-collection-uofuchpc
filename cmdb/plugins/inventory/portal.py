@@ -50,11 +50,11 @@ options:
 EXAMPLES = r"""
 # Minimal example using environment vars
 # Fetch all hosts returned by the CMDB
-plugin: uofuchpc.cmdb.bearer_token
+plugin: uofuchpc.cmdb.portal
 
 # Minimal example using a cmdb_api_bearer_token and cmdb_api_url
 # Fetch all hosts returned by the CMDB
-plugin: uofuchpc.cmdb.bearer_token
+plugin: uofuchpc.cmdb.portal
 cmdb_api_bearer_token: "123456abcdefgH"
 cmdb_api_url: "https://api.example.com/route/"
 """
