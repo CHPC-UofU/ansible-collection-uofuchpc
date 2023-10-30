@@ -1,10 +1,12 @@
+import json
+import os.path
+
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils.common.text.converters import to_native
 from ansible.plugins.inventory import BaseInventoryPlugin
-# from jsonschema import validate
 
 ANSIBLE_METADATA = {
-    'metadata_version': '0.0.4',
+    'metadata_version': '0.0.5',
     'status': ['preview'],
     'supported_by': 'community'
 }
@@ -58,6 +60,14 @@ cmdb_api_url: "https://api.example.com/route/"
 """
 
 try:
+    # jsonschema is required for validating the CMDB API endpoint
+    from jsonschema import validate
+
+    HAS_JSONSCHEMA = True
+except ImportError:
+    HAS_JSONSCHEMA = False
+
+try:
     # requests is required for connecting to the CMDB
     import requests
 
@@ -80,6 +90,10 @@ class InventoryModule(BaseInventoryPlugin):
         """
         Check all requirements for this inventory are satisfied.
         """
+
+        if not HAS_JSONSCHEMA:
+            raise AnsibleParserError('Please install "jsonschema" Python module as this is required'
+                                     ' for validating this dynamic inventory plugin.')
 
         if not HAS_REQUESTS:
             raise AnsibleParserError('Please install "requests" Python module as this is required'
@@ -136,35 +150,14 @@ class InventoryModule(BaseInventoryPlugin):
         raw_data = self._load_inventory_data(cmdb_api_url, cmdb_api_bearer_token)
         self.display.vvv(to_native(raw_data))
 
-        # # Validate the data:
-        # schema = {
-        #     "hosts": {
-        #         "type": "array",
-        #         "items": {
-        #             "type": "object",
-        #             "properties": {
-        #                 "address": {"type", "string"},
-        #                 "attrs": {
-        #                     "type": "object",
-        #                     "properties": {
-        #                         "is_virtual_machine": {"type": "boolean"}
-        #                     }
-        #                 },
-        #                 "tags": {
-        #                     "type": "array",
-        #                     "items": {"type": "string"}
-        #                 }
-        #             },
-        #             "required": ["address"]
-        #         },
-        #         "minItems": 1,
-        #         "additionalItems": False
-        #     }
-        # }
-        # try:
-        #     validate(instance=raw_data, schema=schema)
-        # except Exception as e:
-        #     raise AnsibleError(f"An error occurred, the original exception is: {to_native(e)}")
+        # Validate the data:
+        schema_file = open(os.path.join(os.path.dirname(__file__),
+                                        '..', 'plugin_utils', 'portal-cmdb-schema.json'))
+        schema = json.load(schema_file)
+        try:
+            validate(instance=raw_data, schema=schema)
+        except Exception as e:
+            raise AnsibleError(f"An error occurred, the original exception is: {to_native(e)}")
 
         # Sort the data:
         sorted_data = sorted(raw_data['hosts'], key=lambda item: item['address'])
