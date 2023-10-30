@@ -5,16 +5,10 @@ from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils.common.text.converters import to_native
 from ansible.plugins.inventory import BaseInventoryPlugin
 
-ANSIBLE_METADATA = {
-    'metadata_version': '0.0.5',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r"""
 name: bearer_token
 plugin_type: inventory
-version_added: "0.0.1"
+version_added: "1.0.0"
 authors:
   - UofU CHPC <helpdesk@chpc.utah.edu>
 short_description: "A simple inventory plugin for a CMDB and bearer token."
