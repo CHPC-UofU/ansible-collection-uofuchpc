@@ -1,6 +1,6 @@
 
 # Ansible
-*.bearer_token.yml
+*.portal.yml
 
 # Python
 venv/

@@ -6,25 +6,23 @@ from ansible.module_utils.common.text.converters import to_native
 from ansible.plugins.inventory import BaseInventoryPlugin
 
 DOCUMENTATION = r"""
-name: bearer_token
+name: portal
 plugin_type: inventory
 version_added: "1.0.0"
 authors:
   - UofU CHPC <helpdesk@chpc.utah.edu>
-short_description: "A simple inventory plugin for a CMDB and bearer token."
+short_description: A simple inventory plugin for the CHPC web portal.
 description:
-  - "A simple inventory plugin for a CMDB and bearer token."
-  - Uses a YAML configuration file that ends with bearer_token.(yml|yaml)
+  - A simple inventory plugin for the CHPC web portal.
+  - Uses a YAML configuration file that ends with portal.(yml|yaml).
 requirements:
   - "Python >= 3.9"
   - "requests >= 2.31"
-extends_documentation_fragment:
-  - constructed
 options:
   cmdb_api_bearer_token:
     description: Bearer token for the CMDB API.
     ini:
-      - section: cmdb
+      - section: chpc-portal
         key: cmdb_api_bearer_token
     env:
       - name: CMDB_API_BEARER_TOKEN
@@ -71,9 +69,11 @@ except ImportError:
 
 
 class InventoryModule(BaseInventoryPlugin):
-    """A simple inventory plugin for a CMDB and bearer token."""
+    """
+    A simple inventory plugin for the CHPC web portal.
+    """
 
-    NAME = 'bearer_token'
+    NAME = 'portal'
 
     def __init__(self):
         self._check_requirements()
@@ -96,11 +96,12 @@ class InventoryModule(BaseInventoryPlugin):
     @staticmethod
     def _load_inventory_data(cmdb_api_url: str, cmdb_api_bearer_token: str):
         """
-        Load the inventory from the CMDB
+        Load the inventory from the CMDB.
         :param cmdb_api_url: URL for the CMDB API endpoint
         :param cmdb_api_bearer_token: Bearer token
         :return: JSON
         """
+
         headers = {
             "Authorization": f"Bearer {cmdb_api_bearer_token}",
             "Content-Type": "application/json"
