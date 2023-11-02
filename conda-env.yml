@@ -1,6 +1,6 @@
 # conda env create -f conda-env.yml
 
-name: uofuchpc
+name: uofuchpc.cmdb
 channels:
   - defaults
 dependencies:
