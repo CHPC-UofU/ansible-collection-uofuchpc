@@ -1,6 +1,7 @@
 
 # Ansible
 *.portal.yml
+build/
 
 # Python
 venv/
