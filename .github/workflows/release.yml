@@ -34,7 +34,8 @@ jobs:
 
       - name: Build the Ansible Collection
         run: >-
-          ansible-galaxy collection build -f ./cmdb/ --output-path build
+          mkdir ./build
+          ansible-galaxy collection build -f . --output-path ./build
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
