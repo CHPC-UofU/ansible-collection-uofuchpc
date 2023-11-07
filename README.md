@@ -19,14 +19,23 @@ A simple collection for a CMDB.
 
 ## Testing
 
-````console
+Build and install the collection locally:
+
+```console
 $ mkdir ./build
-$ ansible-galaxy collection build -f ./cmdb/ --output-path build
+$ ansible-galaxy collection build -f . --output-path build
 ...
-$ ansible-galaxy collection install build/uofuchpc-cmdb-0.0.2.tar.gz --force
+$ ansible-galaxy collection install build/uofuchpc-cmdb-X.X.X.tar.gz --force
 ...
+```
+
+Test the collection by un-commenting the content in `./ansible.cfg` and:
+
+```console
+$ export CMDB_API_BEARER_TOKEN=<value>
+$ export CMDB_API_URL=<value>
 $ ansible-doc -t inventory uofuchpc.cmdb.portal
 ...
 $ ansible-inventory --list -i demo.portal.yml
 ...
-````
+```
