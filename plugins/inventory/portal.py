@@ -22,7 +22,7 @@ options:
   cmdb_api_bearer_token:
     description: Bearer token for the CMDB API.
     ini:
-      - section: chpc-portal
+      - section: cmdb
         key: cmdb_api_bearer_token
     env:
       - name: CMDB_API_BEARER_TOKEN
