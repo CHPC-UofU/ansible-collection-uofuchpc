@@ -1,6 +1,6 @@
 # Ansible Collection - uofuchpc.cmdb
 
-A simple collection for a CMDB.
+A simple collection for a Content Management Database (CMDB).
 
 ## Resources
 
