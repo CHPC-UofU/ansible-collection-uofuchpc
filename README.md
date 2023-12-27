@@ -1,25 +1,24 @@
 # Ansible Collection - uofuchpc.cmdb
 
-A simple collection for a Content Management Database (CMDB).
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-## Resources
+A simple Ansible Collection for a Content Management Database (CMDB).
 
-* [Write your own Red Hat Ansible Tower inventory plugin](https://developers.redhat.com/blog/2021/03/10/write-your-own-red-hat-ansible-tower-inventory-plugin#)
-* [How to Write an Inventory Import Script](https://uofu.app.box.com/file/1326767497658?s=8vc2x761npatscf0zfj6z0jc7xque5ev)
-* [Creating custom dynamic inventories for Ansible](https://www.jeffgeerling.com/blog/creating-custom-dynamic-inventories-ansible)
-* [Inventories](https://docs.ansible.com/ansible-tower/latest/html/userguide/inventories.html)
-* [Inventory File Importing](https://docs.ansible.com/ansible-tower/3.8.6/html/administration/scm-inv-source.html#ag-inv-import)
-* [Custom Credential Types](https://docs.ansible.com/ansible-tower/3.8.6/html/userguide/credential_types.html#ug-credential-types)
-* [GitHub: amazon.aws/plugins/inventory/aws_ec2.py](https://github.com/ansible-collections/amazon.aws/blob/main/plugins/inventory/aws_ec2.py)
-* [Inventory plugins](https://docs.ansible.com/ansible/latest/plugins/inventory.html)
-* [How to write an Ansible plugin to create inventory files](https://www.redhat.com/sysadmin/ansible-plugin-inventory-files)
-* [Ansible Dynamic Inventory Using Plugins](https://blog.networktocode.com/post/Ansible-Dynamic-Inventory-using-Plugins/)
-* [Developing plugins](https://docs.ansible.com/ansible/latest/dev_guide/developing_plugins.html#developing-plugins)
-* [Developing dynamic inventory](https://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html)
+## Supported Versions of Ansible
 
-## Testing
+This collection has been tested against following Ansible versions: `>=2.15`.
 
-Build and install the collection locally:
+## Included content
+<!--start collection content-->
+### Dynamic Inventories
+Name | Description
+--- | ---
+[uofuchpc.cmdb.portal](https://github.com/CHPC-UofU/uofuchpc.cmdb/tree/main/docs/uofuchpc.cmdb.portal_inventory.rst)|A simple inventory plugin for the CHPC web portal.
+<!--end collection content-->
+
+## Installing this Collection
+
+You can locally build and install the `uofuchpc.cmdb` collection with the Ansible Galaxy CLI:
 
 ```console
 $ mkdir ./build
@@ -28,6 +27,16 @@ $ ansible-galaxy collection build -f . --output-path build
 $ ansible-galaxy collection install build/uofuchpc-cmdb-X.X.X.tar.gz --force
 ...
 ```
+
+You can also include it in a `requirements.yml` file and install it with `ansible-galaxy collection install -r requirements.yml`, using the format:
+
+```yaml
+collections:
+  - name: https://github.com/CHPC-UofU/uofuchpc.cmdb/releases/download/v<release>/uofuchpc-cmdb-<release>.tar.gz
+    type: url
+```
+
+## Testing this Collection
 
 Test the collection by un-commenting the content in `./ansible.cfg` and:
 
@@ -39,3 +48,7 @@ $ ansible-doc -t inventory uofuchpc.cmdb.portal
 $ ansible-inventory --list -i demo.portal.yml
 ...
 ```
+
+## Using this Collection
+
+See [Ansible Using collections](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html) for more details.
