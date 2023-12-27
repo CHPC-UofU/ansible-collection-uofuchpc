@@ -36,19 +36,6 @@ collections:
     type: url
 ```
 
-## Testing this Collection
-
-Test the collection by un-commenting the content in `./ansible.cfg` and:
-
-```console
-$ export CMDB_API_BEARER_TOKEN=<value>
-$ export CMDB_API_URL=<value>
-$ ansible-doc -t inventory uofuchpc.cmdb.portal
-...
-$ ansible-inventory --list -i demo.portal.yml
-...
-```
-
 ## Using this Collection
 
 See [Ansible Using collections](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html) for more details.
