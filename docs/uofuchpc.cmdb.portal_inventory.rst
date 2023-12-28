@@ -7,10 +7,9 @@ A simple inventory plugin for the CHPC web portal.
 Testing the Plugin
 ----------------------------
 
-Test the plugin by un-commenting the content in `./ansible.cfg` and:
+Test the plugin by un-commenting the content in :code:`./ansible.cfg` and:
 
-.. code-block::
-   :linenos:
+.. code-block:: console
 
    $ export CMDB_API_BEARER_TOKEN=<value>
    $ export CMDB_API_URL=<value>
