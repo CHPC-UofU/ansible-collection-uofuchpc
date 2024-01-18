@@ -1,7 +1,7 @@
 
 # Ansible
 *.portal.yml
-!inventory.portal.yml
+!demo.portal.yml
 build/
 
 # Python

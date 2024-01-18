@@ -15,7 +15,7 @@ Test the plugin by un-commenting the content in :code:`./ansible.cfg` and:
    $ export CMDB_API_URL=<value>
    $ ansible-doc -t inventory uofuchpc.cmdb.portal
    ...
-   $ ansible-inventory --list -i inventory.portal.yml
+   $ ansible-inventory --list -i demo.portal.yml
    ...
 
 More Information
