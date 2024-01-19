@@ -5,6 +5,7 @@ import os.path
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils.common.text.converters import to_native
 from ansible.plugins.inventory import BaseInventoryPlugin
+from jsonschema.exceptions import ValidationError
 
 DOCUMENTATION = r"""
 name: portal
@@ -75,6 +76,7 @@ class InventoryModule(BaseInventoryPlugin):
     """
 
     NAME = 'portal'
+    PRIMARY_KEY = 'primary_address'
 
     def __init__(self):
         self._check_requirements()
@@ -152,11 +154,11 @@ class InventoryModule(BaseInventoryPlugin):
         schema = json.load(schema_file)
         try:
             validate(instance=raw_data, schema=schema)
-        except Exception as e:
-            raise AnsibleError(f"An error occurred, the original exception is: {to_native(e)}")
+        except ValidationError as e:
+            raise AnsibleError(f"Unable to validate data, the original error is: {to_native(e)}")
 
         # Sort the data:
-        sorted_data = sorted(raw_data['hosts'], key=lambda item: item['address'])
+        sorted_data = sorted(raw_data['hosts'], key=lambda item: item[self.PRIMARY_KEY])
 
         # Add groups:
         host_groups = []
@@ -170,7 +172,7 @@ class InventoryModule(BaseInventoryPlugin):
 
         # Add hosts:
         for host in sorted_data:
-            hostname = host['address']
+            hostname = host[self.PRIMARY_KEY]
             self.inventory.add_host(hostname, group='all')
             self.inventory.set_variable(hostname, 'ansible_host', hostname)
 

@@ -1,24 +1,28 @@
 {
-  "hosts": {
-    "type": "array",
-    "items": {
-      "type": "object",
-      "properties": {
-        "address": {"type": "string"},
-        "attrs": {
-          "type": "object",
-          "properties": {
-            "is_virtual_machine": {"type": "boolean"}
-          }
+  "type": "object",
+  "properties": {
+    "hosts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "attrs": {
+            "type": "object",
+            "properties": {
+              "is_virtual_machine": {"type": "boolean"},
+              "tags": {
+                "type": "array",
+                "items": {"type": "string"}
+              }
+            }
+          },
+          "primary_address": {"type": "string"}
         },
-        "tags": {
-          "type": "array",
-          "items": {"type": "string"}
-        }
+        "required": ["primary_address"]
       },
-      "required": ["address"]
-    },
-    "minItems": 1,
-    "additionalItems": "False"
-  }
+      "minItems": 1,
+      "additionalItems": "False"
+    }
+  },
+  "required": ["hosts"]
 }
