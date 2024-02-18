@@ -159,13 +159,13 @@ class InventoryModule(BaseInventoryPlugin):
 
         # Sort the data:
         sorted_data = sorted(raw_data['hosts'], key=lambda item: item[self.PRIMARY_KEY])
+        self.display.vvv(to_native(sorted_data))
 
         # Add groups:
         host_groups = []
         for host in sorted_data:
-            for key, val in host['attrs'].items():
-                if key == 'tags' and isinstance(val, list):
-                    host_groups = host_groups + val
+            for val in host['group_list'].items():
+                host_groups = host_groups + val
         host_groups = list(set(host_groups))
         for group in host_groups:
             self.inventory.add_group(group)
@@ -176,9 +176,7 @@ class InventoryModule(BaseInventoryPlugin):
             self.inventory.add_host(hostname, group='all')
             self.inventory.set_variable(hostname, 'ansible_host', hostname)
 
-            for key, val in host['attrs'].items():
-                if key == 'tags' and isinstance(val, list):
-                    for tag in val:
-                        self.inventory.add_host(hostname, group=tag)
-                else:
-                    self.inventory.set_variable(hostname, key, val)
+            for val in host['group_list'].items():
+                self.inventory.add_host(hostname, group=val)
+
+            self.inventory.set_variable(hostname, "enabled", host['enabled'])
