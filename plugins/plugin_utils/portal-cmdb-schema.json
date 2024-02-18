@@ -9,8 +9,8 @@
           "attrs": {
             "type": "object",
             "properties": {
-              "is_virtual_machine": {"type": "boolean"},
-              "tags": {
+              "enabled": {"type": "boolean"},
+              "group_list": {
                 "type": "array",
                 "items": {"type": "string"}
               }
@@ -18,7 +18,7 @@
           },
           "primary_address": {"type": "string"}
         },
-        "required": ["primary_address"]
+        "required": ["enabled", "group_list", "primary_address"]
       },
       "minItems": 1,
       "additionalItems": "False"
