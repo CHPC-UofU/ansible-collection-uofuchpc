@@ -6,15 +6,10 @@
       "items": {
         "type": "object",
         "properties": {
-          "attrs": {
-            "type": "object",
-            "properties": {
-              "enabled": {"type": "boolean"},
-              "group_list": {
-                "type": "array",
-                "items": {"type": "string"}
-              }
-            }
+          "enabled": {"type": "boolean"},
+          "group_list": {
+            "type": "array",
+            "items": {"type": "string"}
           },
           "primary_address": {"type": "string"}
         },
