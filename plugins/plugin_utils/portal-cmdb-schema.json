@@ -8,8 +8,7 @@
         "properties": {
           "enabled": {"type": "boolean"},
           "group_list": {
-            "type": "array",
-            "items": {"type": "string"}
+            "type": "array"
           },
           "primary_address": {"type": "string"}
         },
