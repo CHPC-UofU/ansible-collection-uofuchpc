@@ -1,6 +1,6 @@
-
 import json
 import os.path
+import re
 
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils.common.text.converters import to_native
@@ -121,6 +121,17 @@ class InventoryModule(BaseInventoryPlugin):
         except Exception as e:
             raise AnsibleError(f"An error occurred, the original exception is: {to_native(e)}")
 
+    @staticmethod
+    def _sanitize_group_name(name):
+        """
+        Sanitize the inventory group name to be compatible with Ansible.
+        :param name: The group name to sanitize
+        :return: The sanitized Ansible group name
+        """
+
+        regex = re.compile(r"[^A-Za-z0-9\_\-]")
+        return regex.sub("_", name).lower().replace('-', '_')
+
     def verify_file(self, path):
         """
         Verify the plugin configuration file
@@ -146,7 +157,7 @@ class InventoryModule(BaseInventoryPlugin):
         cmdb_api_url = self.get_option('cmdb_api_url')
 
         raw_data = self._load_inventory_data(cmdb_api_url, cmdb_api_bearer_token)
-        self.display.vvv(to_native(raw_data))
+        # self.display.vvv(to_native(raw_data))
 
         # Validate the data:
         schema_file = open(os.path.join(os.path.dirname(__file__),
@@ -164,8 +175,9 @@ class InventoryModule(BaseInventoryPlugin):
         # Add groups:
         host_groups = []
         for host in sorted_data:
-            for val in host['group_list'].items():
-                host_groups = host_groups + val
+            if host['group_list'] != [None]:  # temporary hack
+                for val in host['group_list']:
+                    host_groups.append(self._sanitize_group_name(val))
         host_groups = list(set(host_groups))
         for group in host_groups:
             self.inventory.add_group(group)
@@ -176,7 +188,8 @@ class InventoryModule(BaseInventoryPlugin):
             self.inventory.add_host(hostname, group='all')
             self.inventory.set_variable(hostname, 'ansible_host', hostname)
 
-            for val in host['group_list'].items():
-                self.inventory.add_host(hostname, group=val)
+            if host['group_list'] != [None]:  # temporary hack
+                for val in host['group_list']:
+                    self.inventory.add_host(hostname, group=self._sanitize_group_name(val))
 
             self.inventory.set_variable(hostname, "enabled", host['enabled'])
