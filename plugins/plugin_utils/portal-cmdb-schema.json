@@ -6,19 +6,13 @@
       "items": {
         "type": "object",
         "properties": {
-          "attrs": {
-            "type": "object",
-            "properties": {
-              "is_virtual_machine": {"type": "boolean"},
-              "tags": {
-                "type": "array",
-                "items": {"type": "string"}
-              }
-            }
+          "enabled": {"type": "boolean"},
+          "group_list": {
+            "type": "array"
           },
           "primary_address": {"type": "string"}
         },
-        "required": ["primary_address"]
+        "required": ["enabled", "group_list", "primary_address"]
       },
       "minItems": 1,
       "additionalItems": "False"
