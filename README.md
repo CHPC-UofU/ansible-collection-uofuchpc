@@ -1,5 +1,7 @@
 # Ansible Collection - uofuchpc.cmdb
 
+> **_IMPORTANT:_** This repository has been deprecated in favor of its GitLab counterpart.
+
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 A simple Ansible Collection for a Content Management Database (CMDB).
